@@ -9,11 +9,16 @@ class Serializer:
         return self
 
    def send(self, msg):
-	print(struct.pack('cccc', msg[0], msg[1], msg[2], msg[3]))
         self.device.write(struct.pack('cccc', msg[0], msg[1], msg[2], msg[3]))
 
    def receive(self):
-        return struct.unpack('cccc',self.device.read(4))
+        return struct.unpack('cccc', self.device.read(4))
 
    def __exit__(self, exc_type, exc_value, traceback):
 	self.device.close()
+
+if __name__ == '__main__':
+    ser = serializer.Serializer('/dev/ttyACM0')
+
+    ser.send(('b','i','t','e'))
+    print(ser.receive())
